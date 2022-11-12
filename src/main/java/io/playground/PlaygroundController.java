@@ -33,9 +33,8 @@ public class PlaygroundController {
 
     // Post
     @PostMapping("/playground")
-    public String postOne(@RequestBody PlaygroundTable playgroundTable){
+    public void postOne(@RequestBody PlaygroundTable playgroundTable){
         plagroundService.postOne(playgroundTable);
-        return "Posted Successfully";
     }
 
     // Delete
@@ -46,8 +45,7 @@ public class PlaygroundController {
 
     // Put
     @PutMapping("/playground/{Id}")
-    public String putOne(@RequestBody PlaygroundTable playgroundTable, @PathVariable String Id){
+    public void putOne(@RequestBody PlaygroundTable playgroundTable, @PathVariable String Id){
         plagroundService.putOne(Integer.parseInt(Id), playgroundTable);
-        return "Updated Successfully";
     }
 }

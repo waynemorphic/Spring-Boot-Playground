@@ -33,8 +33,9 @@ public class PlagroundService {
     }
 
     // Post
-    public void postOne(PlaygroundTable playgroundTable){
+    public String postOne(PlaygroundTable playgroundTable){
         playgroundRepository.save(playgroundTable);
+        return "Posted Successfully";
     }
 
     // Delete
@@ -44,8 +45,9 @@ public class PlagroundService {
     }
 
     // Put
-    public void putOne(int Id, PlaygroundTable playgroundTable){
+    public String putOne(int Id, PlaygroundTable playgroundTable){
         playgroundRepository.save(playgroundTable);
+        return "Updated Successfully";
 //        PlaygroundTable playgrounds = playgroundRepository.findById(Id).get();
 //
 //        if (Objects.nonNull(playgroundTable.getName()) && !"".equalsIgnoreCase(playgroundTable.getName())){
