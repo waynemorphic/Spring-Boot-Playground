@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      validCheckSum: ANY
+      id: create-new-playground-table
+      author: wayne
+      changes:
+        - createTable:
+            tableName: playground
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(45)
+                  defaultOnNull: false
+              - column:
+                  name: description
+                  type: TEXT
+                  defaultOnNull: false

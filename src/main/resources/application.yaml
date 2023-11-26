@@ -1,0 +1,13 @@
+spring:
+  liquibase:
+    enabled: true
+    changelog: classpath:db/changelog/db.changelog.yaml
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydatabase
+    username: root
+    password: toor
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
+  servlet:
+    context-path: /api
