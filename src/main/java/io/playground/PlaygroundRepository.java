@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
 * the interface and implement them in the service class
 * */
 
-public interface PlaygroundRepository extends CrudRepository<PlaygroundTable, Integer> {
+public interface PlaygroundRepository extends CrudRepository<PlaygroundEntity, Integer> {
 }

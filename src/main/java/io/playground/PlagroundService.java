@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,21 +19,21 @@ public class PlagroundService {
     private PlaygroundRepository playgroundRepository;
 
     // Get all
-    public List<PlaygroundTable> getAll(){
-        List<PlaygroundTable> playgrounds = new ArrayList<>();
+    public List<PlaygroundEntity> getAll(){
+        List<PlaygroundEntity> playgrounds = new ArrayList<>();
         playgroundRepository.findAll()
                 .forEach(playgrounds::add);
         return playgrounds;
     }
 
     // Get one
-    public Optional<PlaygroundTable> getOne(int Id){
+    public Optional<PlaygroundEntity> getOne(int Id){
         return playgroundRepository.findById(Id);
     }
 
     // Post
-    public String postOne(PlaygroundTable playgroundTable){
-        playgroundRepository.save(playgroundTable);
+    public String postOne(PlaygroundEntity playgroundEntity){
+        playgroundRepository.save(playgroundEntity);
         return "Posted Successfully";
     }
 
@@ -45,8 +44,8 @@ public class PlagroundService {
     }
 
     // Put
-    public String putOne(int Id, PlaygroundTable playgroundTable){
-        playgroundRepository.save(playgroundTable);
+    public String putOne(int Id, PlaygroundEntity playgroundEntity){
+        playgroundRepository.save(playgroundEntity);
         return "Updated Successfully";
 //        PlaygroundTable playgrounds = playgroundRepository.findById(Id).get();
 //
