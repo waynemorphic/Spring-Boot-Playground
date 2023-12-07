@@ -1,13 +1,17 @@
 package io.playground;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-/*
-* this class will is an interface that extends the CrudRepository class
-* the CrudRepository class enables us to create Crud operations easily
-* if Crud methods are not defined in the CrudRepository, we can easily define them within
-* the interface and implement them in the service class
-* */
 
-public interface PlaygroundRepository extends CrudRepository<PlaygroundEntity, Integer> {
+public interface PlaygroundRepository extends JpaRepository<PlaygroundEntity, Integer> {
+  @Query("SELECT i FROM PlaygroundEntity i WHERE i.name = :name")
+  List<PlaygroundEntity> findByName(@Param("name") String name);
+
+  @Query("SELECT i FROM PlaygroundEntity i WHERE i.id = :id")
+  Optional<PlaygroundEntity> findById(@Param("id") int id);
+
 }

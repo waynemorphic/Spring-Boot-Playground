@@ -5,18 +5,19 @@ package io.playground;
 * It has a dependency injection from the PlaygroundRepository denoted by @Autowired
 * @Service denotes that the class is a service*/
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
-public class PlagroundService {
+public class PlaygroundService {
     // dependency injection
-    @Autowired
-    private PlaygroundRepository playgroundRepository;
+    private final PlaygroundRepository playgroundRepository;
+
+    public PlaygroundService(PlaygroundRepository playgroundRepository){
+        this.playgroundRepository = playgroundRepository;
+    }
 
     // Get all
     public List<PlaygroundEntity> getAll(){
@@ -27,26 +28,27 @@ public class PlagroundService {
     }
 
     // Get one
-    public Optional<PlaygroundEntity> getOne(int Id){
-        return playgroundRepository.findById(Id);
+    public PlaygroundEntity getOne(int id) throws Exception{
+        Optional<PlaygroundEntity> playgroundEntity = playgroundRepository.findById(id);
+        if (playgroundEntity.isEmpty()){
+            throw new Exception("Entity not found with id " + id);
+        }
+        return playgroundEntity.get();
     }
 
     // Post
-    public String postOne(PlaygroundEntity playgroundEntity){
+    public void postOne(PlaygroundEntity playgroundEntity){
         playgroundRepository.save(playgroundEntity);
-        return "Posted Successfully";
     }
 
     // Delete
-    public String deleteOne(int Id){
-        playgroundRepository.deleteById(Id);
-        return "Deleted successfully";
+    public void deleteOne(int id){
+        playgroundRepository.deleteById(id);
     }
 
     // Put
-    public String putOne(int Id, PlaygroundEntity playgroundEntity){
+    public void putOne(long id, PlaygroundEntity playgroundEntity){
         playgroundRepository.save(playgroundEntity);
-        return "Updated Successfully";
 //        PlaygroundTable playgrounds = playgroundRepository.findById(Id).get();
 //
 //        if (Objects.nonNull(playgroundTable.getName()) && !"".equalsIgnoreCase(playgroundTable.getName())){
@@ -56,5 +58,10 @@ public class PlagroundService {
 //            playgrounds.setDescription(playgroundTable.getDescription());
 //        }
 //        return playgroundRepository.save(playgrounds);
+    }
+
+    // Get by name
+    public List<PlaygroundEntity> getByName(String name){
+        return playgroundRepository.findByName(name);
     }
 }

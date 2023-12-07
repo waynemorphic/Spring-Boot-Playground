@@ -18,12 +18,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "plaground")
+@Table(name = "playground")
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaygroundEntity {
     @Id
-    private Long id;
+    private int id;
     private String name;
     private String description;
 
@@ -31,9 +31,8 @@ public class PlaygroundEntity {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof PlaygroundEntity))
+        if (!(o instanceof PlaygroundEntity that))
             return false;
-        PlaygroundEntity that = (PlaygroundEntity) o;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getName(),
             that.getName()) && Objects.equals(getDescription(), that.getDescription());
     }

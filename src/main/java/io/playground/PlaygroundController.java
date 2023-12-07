@@ -8,58 +8,69 @@ package io.playground;
 * */
 
 import java.util.ArrayList;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RestController
 public class PlaygroundController {
 
     // dependency injection
-    private final PlagroundService plagroundService;
+    private final PlaygroundService playgroundService;
 
-    public PlaygroundController(PlagroundService plagroundService){
-        this.plagroundService = plagroundService;
+    public PlaygroundController(PlaygroundService playgroundService){
+        this.playgroundService = playgroundService;
     }
 
     // Get all
     @GetMapping("/playground")
-    public ResponseEntity<List<PlaygroundEntity>> getAll(
-        @RequestBody PlaygroundEntity playgroundEntity) {
-        return new ResponseEntity<>(plagroundService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<PlaygroundEntity>> getAll(@RequestParam(required = false) String name) {
+
+        List<PlaygroundEntity> list;
+
+        if (name != null){
+            list = playgroundService.getByName(name);
+            log.info("Queried by name {} ", list);
+        } else {
+            list = playgroundService.getAll();
+            log.info("Queried all {} ", list);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     // Get one
-    @GetMapping("/playground/{Id}")
-    public ResponseEntity<Optional<PlaygroundEntity>> getOne(@PathVariable int Id) {
-        return new ResponseEntity<>(plagroundService.getOne(Id), HttpStatus.OK);
+    @GetMapping("/playground/{id}")
+    public ResponseEntity<PlaygroundEntity> getOne(@PathVariable long id) throws Exception {
+        log.info("Queried by id {} ", playgroundService.getOne((int) id));
+        return new ResponseEntity<>(playgroundService.getOne((int) id), HttpStatus.OK);
     }
 
     // Post
     @PostMapping("/playground")
     public ResponseEntity<String> postOne(@RequestBody PlaygroundEntity playgroundEntity) {
-        plagroundService.postOne(playgroundEntity);
+        playgroundService.postOne(playgroundEntity);
         return new ResponseEntity<>("Posted Successfully", HttpStatus.ACCEPTED);
     }
 
     // Delete
-    @DeleteMapping("/playground/{Id}")
-    public ResponseEntity<String> deleteOne(@PathVariable String Id) {
-        plagroundService.deleteOne(Integer.parseInt(Id));
+    @DeleteMapping("/playground/{id}")
+    public ResponseEntity<String> deleteOne(@PathVariable int id) {
+        playgroundService.deleteOne(id);
         return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
     }
 
     // Put
-    @PutMapping("/playground/{Id}")
+    @PutMapping("/playground/{id}")
     public ResponseEntity<List<PlaygroundEntity>> putOne(
-        @RequestBody PlaygroundEntity playgroundEntity, @PathVariable String Id) {
-        plagroundService.putOne(Integer.parseInt(Id), playgroundEntity);
+        @RequestBody PlaygroundEntity playgroundEntity, @PathVariable int id) {
+        playgroundService.putOne(id, playgroundEntity);
         List<PlaygroundEntity> list = new ArrayList<>();
         list.add(playgroundEntity);
+        log.info("Updated entity {}", list);
         return new ResponseEntity<>(list, HttpStatus.ACCEPTED);
     }
 }
