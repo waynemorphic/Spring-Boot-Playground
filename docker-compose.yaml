@@ -1,0 +1,73 @@
+version: "2"
+services:
+  rest:
+    container_name: rest_playground
+    build:
+      dockerfile: Dockerfile
+    image: spring-boot-playground:latest
+    ports:
+      - 8085:8085
+    networks:
+      - springmysql-net
+    environment:
+      - DATASOURCE_HOST=mysqldb:3306
+      - DATASOURCE_USER=myadmin
+      - DATASOURCE_PASSWORD=mypassword
+      - DATASOURCE_DB=playground_database
+      - SPRING_DATA_SOURCE_URL=jdbc:mysql://mysqldb:3306/playground_database?autoReconnect=true&useSSL=false
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+  mysqldb:
+    image: mysql
+    container_name: mysqldb
+    networks:
+      - springmysql-net
+    environment:
+      MYSQL_DATABASE: 'playground_database'
+      MYSQL_USER: 'myadmin'
+      MYSQL_PASSWORD: 'mypassword'
+      MYSQL_ROOT_PASSWORD: 'mypassword'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 10
+  liquibase:
+    image: liquibase/liquibase:latest
+    depends_on:
+      - mysqldb
+    volumes:
+      - /Users/jj/Documents/projects/Spring-Boot-Playground/src/main/resources/:/liquibase/changelog:z
+    environment:
+      - DATABASE_URL=jdbc:mysql://localhost:3306/playground_database
+      - DATABASE_USERNAME=myadmin
+      - DATABASE_PASSWORD=mypassword
+    networks:
+      - springmysql-net
+    command: --url="jdbc:mysql://localhost:3306/playground_database" --username=myadmin --password=mypassword --changeLogFile=db/changelog/db.changelog.yaml update
+networks:
+  springmysql-net:
+volumes:
+  my-db:
+
+# version: specifies the format version to use. '2' is the newer version while '1' is the legacy version
+# services: Each object in this key defines a service/container. It is mandatory
+# build: When given, docker-compose builds an image from a Dockerfile
+# context: When given, it gives the build directory where the Dockerfile is looked up
+# dockerfile: When given, it is an alternative name for a Dockerfile
+# image: Instructs docker which name to give the image when build features are used. Otherwise, image is looked up from
+#         library or remote-registry
+# networks: Identifier for named networks to use. The given name-value must be listed in the networks section.
+# networks: Specifies the networks available to the listed services. In the above, docker-compose creates a named network
+#         of type 'bridge'. If external is set to true, it will use an existing one with a given name.
+
+# After these docker-compose configs are set, run:
+#  'docker-compose config' --> to check for syntax errors
+#  'docker-compose up --build' --> to build the image, create the defined containers and start service in one command
+#  'docker-compose down' --> to stop the containers, remove them from docker and remove the connected networks from it.

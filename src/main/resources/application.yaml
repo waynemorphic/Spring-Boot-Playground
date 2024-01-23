@@ -3,9 +3,9 @@ spring:
     enabled: true
     changelog: classpath:db/changelog/db.changelog.yaml
   datasource:
-    url: jdbc:mysql://localhost:3306/thisdatabase
-    username: root
-    password: toor
+    url: ${DATABASE_URL:jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:playground_database}?useSSL=false&createDatabaseIfNotExist=true}
+    username: ${DATABASE_USERNAME:myadmin}
+    password: ${DATABASE_PASSWORD:mypassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080

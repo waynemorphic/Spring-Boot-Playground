@@ -24,7 +24,9 @@ import lombok.Setter;
 public class PlaygroundEntity {
     @Id
     private int id;
+    @Column
     private String name;
+    @Column
     private String description;
 
     @Override
