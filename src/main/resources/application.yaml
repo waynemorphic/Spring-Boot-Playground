@@ -3,10 +3,17 @@ spring:
     enabled: true
     changelog: classpath:db/changelog/db.changelog.yaml
   datasource:
-    url: ${DATABASE_URL:jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:playground_database}?useSSL=false&createDatabaseIfNotExist=true}
-    username: ${DATABASE_USERNAME:myadmin}
-    password: ${DATABASE_PASSWORD:mypassword}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysqldb:3306/playground_database?useSSL=false&createDatabaseIfNotExist=true
+    username: myadmin
+    password: mypassword
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: false
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 server:
   port: 8080
   servlet:
